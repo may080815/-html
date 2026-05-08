@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 모두의 고민 — 당신의 고민은 혼자가 아닙니다</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --blue-50: #EEF3FF;
+    --blue-100: #DDE8FF;
+    --blue-200: #B8CDFF;
+    --blue-400: #7AA4F7;
+    --blue-600: #4B79E4;
+    --blue-800: #2C52B8;
+    --lav-50: #F2EFFE;
+    --lav-100: #E4DBFD;
+    --lav-200: #C9B9FA;
+    --lav-400: #9B7EED;
+    --lav-600: #6B47D6;
+    --lav-800: #3E2499;
+    --pink-50: #FFF0F5;
+    --pink-100: #FFD6E8;
+    --pink-400: #F582AE;
+    --pink-600: #D94F89;
+    --mint-50: #EDFAF5;
+    --mint-100: #C9F0E0;
+    --mint-400: #52C99B;
+    --mint-600: #1E9E6F;
+    --peach-50: #FFF4EE;
+    --peach-100: #FFE2CC;
+    --peach-400: #F7965A;
+    --bg: #F8F6FF;
+    --surface: #FFFFFF;
+    --text: #2A2340;
+    --text-muted: #7B6FA0;
+    --text-soft: #A99DC8;
+    --border: rgba(107, 71, 214, 0.1);
+    --border-hover: rgba(107, 71, 214, 0.2);
+    --shadow: 0 2px 16px rgba(107, 71, 214, 0.08);
+    --shadow-hover: 0 6px 28px rgba(107, 71, 214, 0.14);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-pill: 999px;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    padding: 0 24px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 22px;
+    color: var(--lav-600);
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+  .nav-logo span { font-size: 13px; color: var(--text-muted); font-family: 'Noto Sans KR'; font-weight: 300; }
+  .nav-links { display: flex; gap: 6px; align-items: center; }
+  .nav-btn {
+    padding: 7px 16px; border-radius: var(--radius-pill); font-size: 13px;
+    cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; font-weight: 500;
+    color: var(--text-muted); background: transparent;
+  }
+  .nav-btn:hover { background: var(--lav-50); color: var(--lav-600); }
+  .nav-btn.active { background: var(--lav-50); color: var(--lav-600); }
+  .nav-btn.primary { background: var(--lav-600); color: white; padding: 7px 20px; }
+  .nav-btn.primary:hover { background: var(--lav-800); }
+  .nick-badge {
+    background: var(--mint-50); color: var(--mint-600); padding: 4px 12px;
+    border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
+    border: 1px solid var(--mint-100);
+  }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ========= LANDING ========= */
+  .landing-hero {
+    min-height: calc(100vh - 60px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 60px 24px;
+    background: radial-gradient(ellipse 80% 60% at 50% 20%, var(--lav-50) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, var(--blue-50) 0%, transparent 60%),
+                var(--bg);
+    position: relative; overflow: hidden;
+  }
+  .floating-blob {
+    position: absolute; border-radius: 50%; filter: blur(50px); opacity: 0.4; pointer-events: none;
+  }
+  .blob1 { width: 350px; height: 350px; background: var(--lav-200); top: -80px; left: -80px; animation: float1 8s ease-in-out infinite; }
+  .blob2 { width: 250px; height: 250px; background: var(--blue-200); bottom: 20px; right: -60px; animation: float2 10s ease-in-out infinite; }
+  .blob3 { width: 180px; height: 180px; background: var(--pink-100); top: 40%; left: 10%; animation: float1 12s ease-in-out infinite reverse; }
+  @keyframes float1 { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
+  @keyframes float2 { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(20px) rotate(5deg); } }
+
+  .hero-tag {
+    background: var(--lav-100); color: var(--lav-600); padding: 6px 18px;
+    border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; margin-bottom: 28px;
+    border: 1px solid var(--lav-200); display: inline-block;
+  }
+  .hero-title {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: clamp(44px, 8vw, 80px); color: var(--text);
+    line-height: 1.1; margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .hero-title em { color: var(--lav-600); font-style: normal; }
+  .hero-sub {
+    font-size: 18px; color: var(--text-muted); max-width: 500px;
+    margin: 0 auto 16px; font-weight: 300; line-height: 1.8;
+  }
+  .hero-tagline {
+    font-family: 'Gowun Dodum'; font-size: 14px; color: var(--lav-400);
+    margin-bottom: 40px; letter-spacing: 1px;
+  }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--lav-600); color: white; padding: 14px 36px;
+    border-radius: var(--radius-pill); font-size: 15px; font-weight: 500;
+    border: none; cursor: pointer; transition: all 0.2s; font-family: inherit;
+  }
+  .btn-primary:hover { background: var(--lav-800); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(107,71,214,0.3); }
+  .btn-outline {
+    background: white; color: var(--lav-600); padding: 14px 36px;
+    border-radius: var(--radius-pill); font-size: 15px; font-weight: 500;
+    border: 1.5px solid var(--lav-200); cursor: pointer; transition: all 0.2s; font-family: inherit;
+  }
+  .btn-outline:hover { border-color: var(--lav-400); background: var(--lav-50); transform: translateY(-2px); }
+
+  .features-section { padding: 80px 24px; max-width: 1000px; margin: 0 auto; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 48px; }
+  .feature-card {
+    background: white; border-radius: var(--radius); padding: 28px;
+    border: 1px solid var(--border); transition: all 0.3s;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--border-hover); }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center;
+    justify-content: center; font-size: 22px; margin-bottom: 16px;
+  }
+  .section-title { font-family: 'Gowun Dodum'; font-size: 32px; text-align: center; color: var(--text); }
+  .section-sub { text-align: center; color: var(--text-muted); font-size: 15px; margin-top: 10px; font-weight: 300; }
+
+  /* LOGIN MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(42,35,64,0.4);
+    backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 24px; padding: 40px; width: 90%; max-width: 420px;
+    box-shadow: 0 20px 60px rgba(42,35,64,0.2); animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal h2 { font-family: 'Gowun Dodum'; font-size: 26px; margin-bottom: 8px; }
+  .modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 28px; }
+  .modal input {
+    width: 100%; padding: 14px 18px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); font-family: inherit; font-size: 15px;
+    outline: none; transition: border 0.2s; margin-bottom: 12px; color: var(--text);
+  }
+  .modal input:focus { border-color: var(--lav-400); }
+  .modal .hint { font-size: 11px; color: var(--text-soft); margin-bottom: 20px; }
+  .nicklist { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .nick-chip {
+    background: var(--lav-50); color: var(--lav-600); padding: 5px 14px;
+    border-radius: var(--radius-pill); font-size: 12px; cursor: pointer;
+    border: 1px solid var(--lav-100); transition: all 0.15s;
+  }
+  .nick-chip:hover { background: var(--lav-100); }
+
+  /* ========= FEED ========= */
+  .feed-wrap { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+  .feed-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  .feed-title { font-family: 'Gowun Dodum'; font-size: 24px; }
+  .cat-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .cat-chip {
+    padding: 6px 16px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500;
+    cursor: pointer; border: 1.5px solid var(--border); background: white; color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .cat-chip:hover, .cat-chip.active { border-color: var(--lav-400); background: var(--lav-50); color: var(--lav-600); }
+  .search-bar {
+    display: flex; gap: 10px; margin-bottom: 28px;
+  }
+  .search-bar input {
+    flex: 1; padding: 11px 18px; border-radius: var(--radius-pill);
+    border: 1.5px solid var(--border); font-family: inherit; font-size: 14px;
+    outline: none; background: white; color: var(--text); transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: var(--lav-400); }
+  .search-bar button {
+    padding: 11px 20px; background: var(--lav-600); color: white;
+    border-radius: var(--radius-pill); border: none; font-size: 13px; cursor: pointer; font-family: inherit;
+  }
+
+  .post-card {
+    background: white; border-radius: var(--radius); padding: 22px 24px;
+    border: 1px solid var(--border); margin-bottom: 14px; cursor: pointer;
+    transition: all 0.25s;
+  }
+  .post-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); border-color: var(--border-hover); }
+  .post-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .post-cat { 
+    padding: 3px 10px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 500;
+  }
+  .cat-학업 { background: var(--blue-50); color: var(--blue-800); }
+  .cat-친구관계 { background: var(--pink-50); color: var(--pink-600); }
+  .cat-진로 { background: var(--mint-50); color: var(--mint-600); }
+  .cat-가족 { background: var(--peach-50); color: var(--peach-400); }
+  .cat-기타 { background: var(--lav-50); color: var(--lav-600); }
+  
+  .post-anon { font-size: 12px; color: var(--text-soft); }
+  .post-time { font-size: 11px; color: var(--text-soft); margin-left: auto; }
+  .post-title { font-size: 16px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
+  .post-preview { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .post-footer { display: flex; align-items: center; gap: 16px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .post-stat { font-size: 12px; color: var(--text-soft); display: flex; align-items: center; gap: 5px; }
+  .heart-btn {
+    background: none; border: 1px solid var(--border); border-radius: var(--radius-pill);
+    padding: 4px 12px; font-size: 12px; color: var(--text-muted); cursor: pointer;
+    transition: all 0.2s; font-family: inherit; display: flex; align-items: center; gap: 5px;
+  }
+  .heart-btn:hover, .heart-btn.active { background: var(--pink-50); border-color: var(--pink-400); color: var(--pink-600); }
+  .report-btn { margin-left: auto; font-size: 11px; color: var(--text-soft); background: none; border: none; cursor: pointer; }
+  .report-btn:hover { color: #E24B4A; }
+
+  .popular-section { margin-bottom: 32px; }
+  .popular-label { font-size: 13px; font-weight: 500; color: var(--lav-600); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .popular-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 12px; margin-bottom: 32px; }
+  .pop-card {
+    background: linear-gradient(135deg, var(--lav-50) 0%, var(--blue-50) 100%);
+    border: 1px solid var(--lav-100); border-radius: var(--radius-sm); padding: 16px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .pop-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .pop-card-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--text); }
+  .pop-card-meta { font-size: 11px; color: var(--text-soft); }
+
+  /* ========= WRITE ========= */
+  .write-wrap { max-width: 680px; margin: 0 auto; padding: 40px 20px; }
+  .write-title { font-family: 'Gowun Dodum'; font-size: 26px; margin-bottom: 6px; }
+  .write-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 36px; }
+  .form-group { margin-bottom: 22px; }
+  .form-label { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; display: block; }
+  .form-input {
+    width: 100%; padding: 13px 18px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); font-family: inherit; font-size: 14px;
+    outline: none; transition: border 0.2s; color: var(--text); background: white;
+  }
+  .form-input:focus { border-color: var(--lav-400); box-shadow: 0 0 0 3px rgba(107,71,214,0.08); }
+  textarea.form-input { resize: vertical; min-height: 180px; line-height: 1.7; }
+  .cat-select { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cat-option {
+    padding: 8px 18px; border-radius: var(--radius-pill); border: 1.5px solid var(--border);
+    cursor: pointer; font-size: 13px; background: white; color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .cat-option.selected { border-color: var(--lav-400); background: var(--lav-50); color: var(--lav-600); font-weight: 500; }
+  .anon-toggle { display: flex; align-items: center; gap: 10px; padding: 14px 18px; background: var(--lav-50); border-radius: var(--radius-sm); border: 1px solid var(--lav-100); }
+  .toggle-switch {
+    width: 42px; height: 24px; border-radius: 12px; background: #ddd;
+    position: relative; cursor: pointer; transition: background 0.25s; flex-shrink: 0;
+  }
+  .toggle-switch.on { background: var(--lav-600); }
+  .toggle-knob {
+    width: 18px; height: 18px; background: white; border-radius: 50%;
+    position: absolute; top: 3px; left: 3px; transition: transform 0.25s; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .toggle-switch.on .toggle-knob { transform: translateX(18px); }
+  .write-footer { display: flex; gap: 12px; justify-content: flex-end; padding-top: 8px; }
+  .write-tip {
+    background: var(--mint-50); border: 1px solid var(--mint-100); border-radius: var(--radius-sm);
+    padding: 14px 18px; font-size: 12px; color: var(--mint-600); margin-bottom: 28px;
+    line-height: 1.7;
+  }
+
+  /* ========= DETAIL ========= */
+  .detail-wrap { max-width: 720px; margin: 0 auto; padding: 36px 20px; }
+  .back-btn { 
+    background: none; border: none; color: var(--text-muted); font-size: 13px;
+    cursor: pointer; font-family: inherit; margin-bottom: 24px; display: flex; align-items: center; gap: 6px;
+    padding: 0;
+  }
+  .back-btn:hover { color: var(--lav-600); }
+  .detail-card { background: white; border-radius: var(--radius); padding: 32px; border: 1px solid var(--border); margin-bottom: 24px; }
+  .detail-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
+  .detail-title { font-family: 'Gowun Dodum'; font-size: 26px; color: var(--text); line-height: 1.3; }
+  .detail-body { font-size: 15px; color: var(--text); line-height: 1.9; white-space: pre-line; }
+  .detail-actions { display: flex; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); align-items: center; }
+  .support-btn {
+    display: flex; align-items: center; gap: 8px; padding: 10px 22px;
+    background: var(--pink-50); border: 1.5px solid var(--pink-100); border-radius: var(--radius-pill);
+    color: var(--pink-600); font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; font-family: inherit;
+  }
+  .support-btn:hover, .support-btn.active { background: var(--pink-600); color: white; border-color: var(--pink-600); }
+  .comments-section { background: white; border-radius: var(--radius); padding: 28px; border: 1px solid var(--border); }
+  .comments-title { font-size: 16px; font-weight: 500; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .comment-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .comment-nick { font-size: 12px; font-weight: 500; color: var(--lav-600); background: var(--lav-50); padding: 2px 10px; border-radius: var(--radius-pill); }
+  .comment-time { font-size: 11px; color: var(--text-soft); }
+  .comment-body { font-size: 14px; color: var(--text); line-height: 1.7; }
+  .comment-write { margin-top: 20px; }
+  .comment-write textarea {
+    width: 100%; padding: 13px 16px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); font-family: inherit; font-size: 14px;
+    resize: none; height: 90px; outline: none; transition: border 0.2s; color: var(--text);
+  }
+  .comment-write textarea:focus { border-color: var(--lav-400); }
+  .comment-submit { display: flex; justify-content: flex-end; margin-top: 8px; }
+
+  /* ========= ADMIN ========= */
+  .admin-wrap { max-width: 1000px; margin: 0 auto; padding: 32px 20px; }
+  .admin-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+  .admin-title { font-family: 'Gowun Dodum'; font-size: 24px; }
+  .admin-badge { background: #E24B4A22; color: #A32D2D; padding: 4px 12px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; margin-bottom: 32px; }
+  .stat-card { background: white; border-radius: var(--radius-sm); padding: 20px; border: 1px solid var(--border); }
+  .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; color: var(--text); }
+  .stat-sub { font-size: 11px; color: var(--text-soft); margin-top: 4px; }
+  .report-table { background: white; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+  .table-header { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+  .report-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .report-row:last-child { border-bottom: none; }
+  .report-text { flex: 1; min-width: 200px; }
+  .report-text strong { font-size: 14px; display: block; margin-bottom: 3px; }
+  .report-text span { font-size: 12px; color: var(--text-muted); }
+  .report-actions { display: flex; gap: 8px; }
+  .btn-sm {
+    padding: 5px 12px; border-radius: var(--radius-pill); font-size: 11px;
+    cursor: pointer; font-family: inherit; font-weight: 500; border: none; transition: all 0.2s;
+  }
+  .btn-danger { background: #FCEBEB; color: #A32D2D; }
+  .btn-danger:hover { background: #A32D2D; color: white; }
+  .btn-safe { background: var(--mint-50); color: var(--mint-600); }
+  .btn-safe:hover { background: var(--mint-600); color: white; }
+  .admin-pass-wrap { display: flex; gap: 10px; margin-bottom: 32px; }
+  .admin-pass-wrap input { flex: 1; padding: 10px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; outline: none; }
+  .admin-pass-wrap button { padding: 10px 20px; background: var(--lav-600); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: inherit; }
+  .admin-locked { text-align: center; padding: 60px 0; color: var(--text-muted); }
+  .admin-locked h3 { font-size: 20px; margin-bottom: 10px; color: var(--text); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: white; padding: 12px 24px; border-radius: var(--radius-pill);
+    font-size: 13px; z-index: 300; opacity: 0; transition: all 0.3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* EMPTY STATE */
+  .empty { text-align: center; padding: 60px 0; }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+  .empty p { color: var(--text-muted); font-size: 14px; }
+
+  .divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .hero-title { font-size: 44px; }
+    nav { padding: 0 16px; }
+    .nav-links .nav-btn:not(.primary):not(.active) { display: none; }
+    .modal { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="goPage('landing')">
+    우리 모두의 고민
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn" onclick="goPage('feed')">고민 목록</button>
+    <button class="nav-btn" onclick="requireLogin('write')">고민 쓰기</button>
+    <button class="nav-btn" onclick="goPage('admin')">관리</button>
+    <div id="nav-auth">
+      <button class="nav-btn primary" onclick="openLogin()">익명 입장</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ======= LANDING ======= -->
+<div id="page-landing" class="page active">
+  <section class="landing-hero">
+    <div class="floating-blob blob1"></div>
+    <div class="floating-blob blob2"></div>
+    <div class="floating-blob blob3"></div>
+    <div class="hero-tag">🎓 고등학생을 위한 익명 고민 공간</div>
+    <h1 class="hero-title"><em>가로 막히면</em><br>세로 시작하면 돼</h1>
+    <p class="hero-sub">혼자 끌어안고 있던 고민,<br>이곳에서는 말해도 괜찮아요.</p>
+    <p class="hero-tagline">당신의 고민은 혼자가 아닙니다.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openLogin()">익명으로 시작하기</button>
+      <button class="btn-outline" onclick="goPage('feed')">고민 둘러보기</button>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <h2 class="section-title">이런 고민들이 있어요</h2>
+    <p class="section-sub">혼자 감당하기 어렵다고 느껴지면, 여기 나눠보세요.</p>
+    <div class="features-grid">
+      <div class="feature-card" onclick="filterAndGo('학업')">
+        <div class="feature-icon" style="background:var(--blue-50);">📚</div>
+        <h3 style="font-size:15px;margin-bottom:8px;font-weight:500;">학업 &amp; 성적</h3>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">성적이 안 오를 때, 공부 의욕이 없을 때, 시험 스트레스</p>
+      </div>
+      <div class="feature-card" onclick="filterAndGo('친구관계')">
+        <div class="feature-icon" style="background:var(--pink-50);">🫂</div>
+        <h3 style="font-size:15px;margin-bottom:8px;font-weight:500;">친구관계</h3>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">갈등, 왕따, 소외감, 새 학교 적응 어려움</p>
+      </div>
+      <div class="feature-card" onclick="filterAndGo('진로')">
+        <div class="feature-icon" style="background:var(--mint-50);">🌱</div>
+        <h3 style="font-size:15px;margin-bottom:8px;font-weight:500;">진로 &amp; 미래</h3>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">꿈이 없을 때, 대학 고민, 진로 선택의 막막함</p>
+      </div>
+      <div class="feature-card" onclick="filterAndGo('가족')">
+        <div class="feature-icon" style="background:var(--peach-50);">🏠</div>
+        <h3 style="font-size:15px;margin-bottom:8px;font-weight:500;">가족</h3>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">부모님과의 갈등, 기대 압박, 형제자매 관계</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:var(--lav-600);padding:60px 24px;text-align:center;margin-top:40px;">
+    <p style="font-family:'Gowun Dodum';font-size:28px;color:white;margin-bottom:10px;">당신의 고민은 혼자가 아닙니다.</p>
+    <p style="font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:28px;">쉼표에는 당신의 이야기를 들어줄 친구들이 있어요.</p>
+    <button class="btn-outline" style="border-color:rgba(255,255,255,0.5);color:white;" onclick="openLogin()">지금 바로 시작하기</button>
+  </div>
+</div>
+
+<!-- ======= FEED ======= -->
+<div id="page-feed" class="page">
+  <div class="feed-wrap">
+    <div class="feed-header">
+      <div class="feed-title">📋 고민 목록</div>
+      <button class="btn-primary" style="padding:9px 20px;font-size:13px;" onclick="requireLogin('write')">✏️ 고민 쓰기</button>
+    </div>
+
+    <div class="popular-section">
+      <div class="popular-label">💛 많은 위로를 받은 고민</div>
+      <div class="popular-cards" id="popular-cards"></div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="🔍 고민 제목이나 내용으로 검색..." oninput="renderFeed()">
+      <button onclick="renderFeed()">검색</button>
+    </div>
+
+    <div class="cat-filter" id="cat-filter">
+      <div class="cat-chip active" data-cat="전체" onclick="setCat(this)">전체</div>
+      <div class="cat-chip" data-cat="학업" onclick="setCat(this)">📚 학업</div>
+      <div class="cat-chip" data-cat="친구관계" onclick="setCat(this)">🫂 친구관계</div>
+      <div class="cat-chip" data-cat="진로" onclick="setCat(this)">🌱 진로</div>
+      <div class="cat-chip" data-cat="가족" onclick="setCat(this)">🏠 가족</div>
+      <div class="cat-chip" data-cat="기타" onclick="setCat(this)">💬 기타</div>
+    </div>
+
+    <div id="feed-list"></div>
+  </div>
+</div>
+
+<!-- ======= WRITE ======= -->
+<div id="page-write" class="page">
+  <div class="write-wrap">
+    <h2 class="write-title">✏️ 고민 털어놓기</h2>
+    <p class="write-sub">여기서는 솔직하게 말해도 괜찮아요. 이름은 몰라도, 마음은 들어줄게요.</p>
+
+    <div class="write-tip">
+      💡 <strong>안전한 공간이에요.</strong> 닉네임 외에 개인정보는 일절 저장되지 않습니다.<br>
+      다른 사람을 향한 욕설이나 비방은 삼가주세요. 서로를 응원하는 공간이에요. 🌿
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">제목</label>
+      <input type="text" id="new-title" class="form-input" placeholder="고민을 한 줄로 표현해보세요" maxlength="60">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">카테고리</label>
+      <div class="cat-select" id="cat-select">
+        <div class="cat-option selected" data-cat="학업">📚 학업</div>
+        <div class="cat-option" data-cat="친구관계">🫂 친구관계</div>
+        <div class="cat-option" data-cat="진로">🌱 진로</div>
+        <div class="cat-option" data-cat="가족">🏠 가족</div>
+        <div class="cat-option" data-cat="기타">💬 기타</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">내용</label>
+      <textarea id="new-content" class="form-input" placeholder="마음 속에 담아두었던 이야기를 자유롭게 적어보세요. 어떤 상황인지, 어떤 기분인지 써도 좋아요 😊"></textarea>
+    </div>
+
+    <div class="form-group">
+      <div class="anon-toggle">
+        <div class="toggle-switch on" id="anon-toggle" onclick="toggleAnon()">
+          <div class="toggle-knob"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);">익명으로 게시</div>
+          <div style="font-size:11px;color:var(--text-muted);">켜짐: 닉네임 대신 '익명의 학생'으로 표시됩니다</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="write-footer">
+      <button class="btn-outline" onclick="goPage('feed')">취소</button>
+      <button class="btn-primary" onclick="submitPost()">💛 고민 게시하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======= DETAIL ======= -->
+<div id="page-detail" class="page">
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="goPage('feed')">← 목록으로 돌아가기</button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- ======= ADMIN ======= -->
+<div id="page-admin" class="page">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h2 class="admin-title">🛡️ 관리자 페이지</h2>
+      <span class="admin-badge">관리자 전용</span>
+    </div>
+    <div id="admin-body">
+      <div class="admin-locked">
+        <h3>🔒 관리자 비밀번호를 입력해주세요</h3>
+        <p style="margin-bottom:24px;">비밀번호: <code>admin123</code> (데모용)</p>
+        <div class="admin-pass-wrap" style="max-width:360px;margin:0 auto;">
+          <input type="password" id="admin-pass" placeholder="비밀번호 입력">
+          <button onclick="checkAdmin()">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <h2>🌸 익명으로 입장하기</h2>
+    <p>닉네임만 입력하면 돼요. 개인정보는 저장되지 않아요.</p>
+    <input type="text" id="nick-input" placeholder="닉네임 입력 (예: 파란하늘)" maxlength="12" oninput="this.value=this.value.slice(0,12)">
+    <div class="hint">2~12자, 개인을 특정할 수 없는 닉네임을 사용해주세요</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">💡 추천 닉네임</div>
+    <div class="nicklist">
+      <span class="nick-chip" onclick="setNick('파란하늘')">파란하늘</span>
+      <span class="nick-chip" onclick="setNick('새벽별')">새벽별</span>
+      <span class="nick-chip" onclick="setNick('초록잎새')">초록잎새</span>
+      <span class="nick-chip" onclick="setNick('하얀구름')">하얀구름</span>
+      <span class="nick-chip" onclick="setNick('달빛소나기')">달빛소나기</span>
+      <span class="nick-chip" onclick="setNick('들꽃')">들꽃</span>
+      <span class="nick-chip" onclick="setNick('보라별빛')">보라별빛</span>
+      <span class="nick-chip" onclick="setNick('은하수')">은하수</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-outline" onclick="closeLogin()" style="flex:1;">취소</button>
+      <button class="btn-primary" onclick="doLogin()" style="flex:2;">입장하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+let currentUser = null;
+let currentCat = '전체';
+let currentPostId = null;
+let anonMode = true;
+let selectedCat = '학업';
+let adminUnlocked = false;
+let afterLoginGo = null;
+
+const catEmoji = {'학업':'📚','친구관계':'🫂','진로':'🌱','가족':'🏠','기타':'💬'};
+
+const samplePosts = [
+  {
+    id: 1, title: "수학 성적이 계속 제자리인데 어떻게 해야 할까요",
+    cat: "학업", nick: "익명의 학생", anon: true,
+    content: `3학년이 됐는데도 수학 성적이 3등급에서 안 오릅니다.\n매일 문제집 풀고 인강도 듣는데 왜 안 오르는 건지...\n친구들은 벌써 2등급, 1등급인데 저만 뒤처지는 느낌이에요.\n\n공부법이 잘못된 건지, 아니면 제가 머리가 나쁜 건지 모르겠어요.\n입시가 다가올수록 더 불안해지고, 밤마다 자도 자도 피곤한 것 같아요.\n\n누군가 비슷한 경험을 해본 사람 있나요? 어떻게 극복했나요?`,
+    time: "2시간 전", hearts: 34, comments: [
+      {nick:"보라별빛", text:"저도 작년에 똑같은 상황이었어요! 개념 위주로 다시 보고 기출을 반복했더니 조금씩 올랐어요. 포기하지 마세요 💜", time:"1시간 전"},
+      {nick:"초록잎새", text:"성적이 오르기 직전이 가장 힘들대요. 지금 열심히 하고 있는 것 자체가 대단한 거예요 🌱", time:"50분 전"},
+      {nick:"익명의 학생", text:"틀린 문제 오답 노트 만들어보는 게 저한테는 효과 있었어요. 방법보다 꾸준함이 더 중요한 것 같더라고요", time:"30분 전"},
+    ]
+  },
+  {
+    id: 2, title: "친한 친구한테 갑자기 무시당하는 것 같아서 너무 힘들어요",
+    cat: "친구관계", nick: "하얀구름", anon: false,
+    content: `6년 넘게 친하게 지낸 친구인데 2학년 올라오면서 갑자기 태도가 달라졌어요.\n\n다른 그룹 친구들이랑 어울리면서 저를 피하는 것 같고, 메시지도 잘 안 읽어요.\n같이 점심 먹자고 해도 핑계 대고 다른 친구들이랑 먹으러 가더라고요.\n\n제가 뭔가 잘못한 건지, 아니면 그냥 자연스럽게 멀어지는 건지 모르겠어요.\n직접 물어보고 싶은데 괜히 더 어색해질까 봐 무섭기도 하고...\n\n이런 경험 있는 분들 어떻게 하셨나요?`,
+    time: "5시간 전", hearts: 51, comments: [
+      {nick:"달빛소나기", text:"저도 비슷한 일 있었는데 진짜 많이 힘드셨겠다 😢 직접 물어보는 게 용기 있는 행동이에요. 대화가 통하는 친구라면 솔직하게 말해보는 것도 좋을 것 같아요", time:"4시간 전"},
+      {nick:"새벽별", text:"사람 사이는 때로 거리가 생기기도 하지만, 진짜 친구라면 다시 가까워질 수 있어요. 너무 자책하지 마세요 🌟", time:"3시간 전"},
+    ]
+  },
+  {
+    id: 3, title: "꿈이 없다는 게 이상한 건가요? 진로를 모르겠어요",
+    cat: "진로", nick: "익명의 학생", anon: true,
+    content: `주변 친구들은 다 하고 싶은 것, 되고 싶은 것이 있는데\n저는 아무것도 없어요. 뭘 해야 할지도 모르겠고.\n\n어른들은 "꿈을 가져라"고 하는데 어떻게 꿈을 갖는 건지도 모르겠고\n관심 있는 것도 딱히 없는 것 같아요.\n\n이런 제가 이상한 건가요? 진로를 어떻게 찾아야 할까요?\n아니면 그냥 꿈 없이 살아도 되는 걸까요?`,
+    time: "1일 전", hearts: 89, comments: [
+      {nick:"파란하늘", text:"저도 고3 때까지 꿈 없었어요! 지금은 스스로 잘 살고 있어요. 꿈은 살면서 찾아가는 거라고 생각해요. 지금 당장 없어도 전혀 이상한 게 아니에요 💙", time:"22시간 전"},
+      {nick:"초록잎새", text:"작은 것들에 호기심 가져보는 것부터 시작해보세요. 꿈은 어느 날 갑자기 생기기도 하거든요 🌿", time:"20시간 전"},
+      {nick:"은하수", text:"진로를 모른다는 건 아직 가능성이 열려있다는 뜻이기도 해요. 너무 조급해하지 않아도 돼요 ✨", time:"18시간 전"},
+      {nick:"익명의 학생", text:"저도 같은 고민이에요. 이 글 보고 조금 위안이 됐어요. 우리 같이 천천히 찾아봐요 🤍", time:"12시간 전"},
+    ]
+  },
+  {
+    id: 4, title: "부모님이 의대 가라고 하시는데 저는 하고 싶은 게 따로 있어요",
+    cat: "가족", nick: "익명의 학생", anon: true,
+    content: `저는 디자인이나 영상 쪽 일을 하고 싶은데, 부모님은 무조건 의대라고 하세요.\n\n성적도 안 되고, 관심도 없는데 억지로 하면 뭐가 될까 싶어요.\n하지만 부모님 기대를 저버리는 것도 죄송하고...\n\n제가 좋아하는 걸 하고 싶다고 말씀드렸더니 "철없는 소리"라고 하셨어요.\n\n이런 상황에서 부모님을 어떻게 설득하셨나요? 아니면 어떻게 마음을 정리하셨나요?`,
+    time: "2일 전", hearts: 67, comments: [
+      {nick:"달빛소나기", text:"정말 힘드시겠다. 부모님은 걱정 때문에 그러시는 거지만, 본인이 행복하게 할 수 있는 일이 제일 중요해요. 천천히 대화를 시도해보세요 💛", time:"2일 전"},
+      {nick:"보라별빛", text:"저도 비슷한 갈등 있었어요. 관련 직업 정보, 진로 계획을 정리해서 보여드렸더니 조금 열린 마음이 되시더라고요. 막연하게 원한다고 하는 것보다 구체적으로 보여드리는 게 효과 있었어요", time:"1일 전"},
+    ]
+  },
+  {
+    id: 5, title: "학교 갔다 오면 너무 지쳐서 아무것도 못하겠어요",
+    cat: "기타", nick: "새벽별", anon: false,
+    content: `요즘 학교 다녀오면 바로 침대에 쓰러지는데\n공부도 못하고 밥도 먹기 싫고 그냥 아무것도 하기 싫어요.\n\n번아웃인건지 그냥 게으른 건지 모르겠고\n이 상태가 계속되면 어떡하나 싶어요.\n\n비슷한 경험 있으신 분들 어떻게 하셨나요?`,
+    time: "3일 전", hearts: 45, comments: [
+      {nick:"하얀구름", text:"번아웃이 맞는 것 같아요. 억지로 하려 하지 말고 하루 이틀은 진짜 아무것도 안 하고 쉬어봐요. 몸이 먼저예요 🤍", time:"3일 전"},
+    ]
+  },
+  {
+    id: 6, title: "전학 온 지 한 달인데 아직 아무도 친구가 없어요",
+    cat: "친구관계", nick: "익명의 학생", anon: true,
+    content: `중학교 때부터 친하게 지내던 친구들이랑 멀어지고\n새 학교에서는 이미 다들 친한 그룹이 있어서 끼기가 너무 어렵더라고요.\n\n급식도 혼자 먹고 쉬는 시간에도 혼자 있는 경우가 많아요.\n어색하게 웃으면서 넘기고 있는데 집에 오면 너무 외로워요.\n\n전학생으로서 어떻게 친구를 만들어가셨나요?`,
+    time: "4일 전", hearts: 72, comments: [
+      {nick:"파란하늘", text:"저도 전학생이었는데, 동아리 들어가는 게 제일 도움이 됐어요. 같은 관심사로 자연스럽게 어울릴 수 있거든요 💙", time:"4일 전"},
+      {nick:"은하수", text:"한 달이면 아직 초반이에요. 조금만 더 버텨봐요. 분명 인연이 생길 거예요 ✨ 외롭겠지만 당신은 혼자가 아니에요!", time:"3일 전"},
+      {nick:"초록잎새", text:"같은 반 중에 혼자인 것 같아 보이는 친구한테 먼저 말 걸어보는 것도 좋아요. 의외로 상대도 기다리고 있을 수 있어요 🌿", time:"3일 전"},
+    ]
+  }
+];
+
+let posts = [...samplePosts];
+let nextId = 10;
+const reportedIds = new Set();
+
+// ===== NAVIGATION =====
+function goPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (page === 'feed') { renderFeed(); renderPopular(); }
+  if (page === 'admin') { renderAdmin(); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function filterAndGo(cat) {
+  currentCat = cat;
+  goPage('feed');
+  setTimeout(() => {
+    document.querySelectorAll('.cat-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.cat === cat);
+    });
+    renderFeed();
+  }, 50);
+}
+
+function requireLogin(page) {
+  if (!currentUser) { afterLoginGo = page; openLogin(); return; }
+  goPage(page);
+}
+
+// ===== LOGIN =====
+function openLogin() { document.getElementById('login-modal').classList.add('open'); }
+function closeLogin() { document.getElementById('login-modal').classList.remove('open'); }
+function setNick(n) { document.getElementById('nick-input').value = n; }
+function doLogin() {
+  const n = document.getElementById('nick-input').value.trim();
+  if (!n || n.length < 2) { toast('닉네임은 2자 이상이어야 해요'); return; }
+  currentUser = n;
+  document.getElementById('nav-auth').innerHTML = `<span class="nick-badge">🌸 ${n}</span>`;
+  closeLogin();
+  toast(`안녕하세요, ${n}님! 🌸`);
+  if (afterLoginGo) { goPage(afterLoginGo); afterLoginGo = null; }
+}
+
+// ===== FEED =====
+function setCat(el) {
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  currentCat = el.dataset.cat;
+  renderFeed();
+}
+
+function renderPopular() {
+  const sorted = [...posts].sort((a,b) => b.hearts - a.hearts).slice(0,3);
+  const el = document.getElementById('popular-cards');
+  el.innerHTML = sorted.map(p => `
+    <div class="pop-card" onclick="showDetail(${p.id})">
+      <div style="font-size:11px;margin-bottom:6px;">
+        <span class="post-cat cat-${p.cat}">${catEmoji[p.cat]} ${p.cat}</span>
+      </div>
+      <div class="pop-card-title">${p.title}</div>
+      <div class="pop-card-meta">💛 ${p.hearts} · 💬 ${p.comments.length}</div>
+    </div>
+  `).join('');
+}
+
+function renderFeed() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase();
+  let filtered = posts.filter(p => {
+    const matchCat = currentCat === '전체' || p.cat === currentCat;
+    const matchQ = !q || p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  const el = document.getElementById('feed-list');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">🌿</div><h3>아직 고민이 없어요</h3><p>첫 번째 고민을 작성해보세요!</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(p => `
+    <div class="post-card" onclick="showDetail(${p.id})">
+      <div class="post-meta">
+        <span class="post-cat cat-${p.cat}">${catEmoji[p.cat]} ${p.cat}</span>
+        <span class="post-anon">${p.anon ? '익명의 학생' : p.nick}</span>
+        <span class="post-time">${p.time}</span>
+      </div>
+      <div class="post-title">${p.title}</div>
+      <div class="post-preview">${p.content.slice(0,80).replace(/\n/g,' ')}...</div>
+      <div class="post-footer">
+        <span class="post-stat">💛 ${p.hearts}</span>
+        <span class="post-stat">💬 ${p.comments.length}</span>
+        <button class="report-btn" onclick="event.stopPropagation();reportPost(${p.id})">🚩 신고</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== DETAIL =====
+function showDetail(id) {
+  currentPostId = id;
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  const heartActive = p.hearted ? 'active' : '';
+  const el = document.getElementById('detail-content');
+  el.innerHTML = `
+    <div class="detail-card">
+      <div class="detail-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+            <span class="post-cat cat-${p.cat}">${catEmoji[p.cat]} ${p.cat}</span>
+            <span style="font-size:12px;color:var(--text-soft);">${p.anon?'익명의 학생':p.nick} · ${p.time}</span>
+          </div>
+          <div class="detail-title">${p.title}</div>
+        </div>
+      </div>
+      <div class="detail-body">${p.content}</div>
+      <div class="detail-actions">
+        <button class="support-btn ${heartActive}" id="heart-btn" onclick="toggleHeart(${id})">
+          💛 <span id="heart-count">${p.hearts}</span> 명이 응원해요
+        </button>
+        <button class="report-btn" onclick="reportPost(${id})">🚩 신고</button>
+      </div>
+    </div>
+    <div class="comments-section">
+      <div class="comments-title">💬 응원 댓글 <span style="color:var(--text-soft);font-size:14px;">${p.comments.length}개</span></div>
+      <div id="comment-list">
+        ${p.comments.map(c => `
+          <div class="comment-item">
+            <div class="comment-meta">
+              <span class="comment-nick">🌸 ${c.nick}</span>
+              <span class="comment-time">${c.time}</span>
+            </div>
+            <div class="comment-body">${c.text}</div>
+          </div>
+        `).join('')}
+        ${p.comments.length === 0 ? '<div style="text-align:center;padding:32px 0;color:var(--text-soft);font-size:14px;">아직 댓글이 없어요. 첫 번째로 응원해주세요! 💛</div>' : ''}
+      </div>
+      <div class="comment-write">
+        <textarea id="comment-input" placeholder="${currentUser ? '따뜻한 응원 한마디를 남겨주세요 🤍' : '댓글을 작성하려면 먼저 입장해주세요'}"></textarea>
+        <div class="comment-submit">
+          <button class="btn-primary" style="padding:9px 22px;font-size:13px;" onclick="submitComment(${id})">💛 응원 댓글 달기</button>
+        </div>
+      </div>
+    </div>
+  `;
+  goPage('detail');
+}
+
+function toggleHeart(id) {
+  if (!currentUser) { toast('먼저 입장해주세요 🌸'); return; }
+  const p = posts.find(x => x.id === id);
+  p.hearted = !p.hearted;
+  p.hearts += p.hearted ? 1 : -1;
+  document.getElementById('heart-btn').classList.toggle('active', p.hearted);
+  document.getElementById('heart-count').textContent = p.hearts;
+  toast(p.hearted ? '응원을 보냈어요 💛' : '응원을 취소했어요');
+}
+
+function submitComment(id) {
+  if (!currentUser) { afterLoginGo = null; openLogin(); return; }
+  const inp = document.getElementById('comment-input');
+  const text = inp.value.trim();
+  if (!text) { toast('댓글 내용을 입력해주세요'); return; }
+  const p = posts.find(x => x.id === id);
+  p.comments.push({ nick: currentUser, text, time: '방금 전' });
+  inp.value = '';
+  showDetail(id);
+  toast('응원 댓글을 달았어요 💛');
+}
+
+// ===== WRITE =====
+document.querySelectorAll('#cat-select .cat-option').forEach(el => {
+  el.addEventListener('click', function() {
+    document.querySelectorAll('#cat-select .cat-option').forEach(e => e.classList.remove('selected'));
+    this.classList.add('selected');
+    selectedCat = this.dataset.cat;
+  });
+});
+
+function toggleAnon() {
+  anonMode = !anonMode;
+  const t = document.getElementById('anon-toggle');
+  t.classList.toggle('on', anonMode);
+}
+
+function submitPost() {
+  const title = document.getElementById('new-title').value.trim();
+  const content = document.getElementById('new-content').value.trim();
+  if (!title) { toast('제목을 입력해주세요'); return; }
+  if (content.length < 10) { toast('내용을 조금 더 작성해주세요'); return; }
+  const newPost = {
+    id: nextId++, title, cat: selectedCat,
+    nick: currentUser || '익명의 학생', anon: anonMode,
+    content, time: '방금 전', hearts: 0, comments: []
+  };
+  posts.unshift(newPost);
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-content').value = '';
+  toast('고민을 게시했어요. 응원할게요 💛');
+  showDetail(newPost.id);
+}
+
+// ===== REPORT =====
+function reportPost(id) {
+  reportedIds.add(id);
+  toast('신고가 접수됐어요. 관리자가 검토할게요 🛡️');
+}
+
+// ===== ADMIN =====
+function checkAdmin() {
+  if (document.getElementById('admin-pass').value === 'admin123') {
+    adminUnlocked = true;
+    renderAdmin();
+  } else {
+    toast('비밀번호가 틀렸어요');
+  }
+}
+
+function renderAdmin() {
+  const el = document.getElementById('admin-body');
+  if (!adminUnlocked) return;
+  const totalHearts = posts.reduce((s,p) => s+p.hearts, 0);
+  const totalComments = posts.reduce((s,p) => s+p.comments.length, 0);
+  const reported = posts.filter(p => reportedIds.has(p.id));
+  el.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">전체 게시물</div>
+        <div class="stat-value">${posts.length}</div>
+        <div class="stat-sub">오늘 +${posts.filter(p=>p.time.includes('방금')||p.time.includes('분')||p.time.includes('시간')).length}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">전체 댓글</div>
+        <div class="stat-value">${totalComments}</div>
+        <div class="stat-sub">응원 댓글</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">받은 응원</div>
+        <div class="stat-value">${totalHearts}</div>
+        <div class="stat-sub">💛 총 응원 수</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">신고된 게시물</div>
+        <div class="stat-value" style="color:#E24B4A;">${reported.length}</div>
+        <div class="stat-sub">검토 필요</div>
+      </div>
+    </div>
+
+    <div class="report-table">
+      <div class="table-header">
+        🚩 신고된 게시물 (${reported.length}건)
+        <span style="font-size:12px;color:var(--text-soft);">신고 내역 검토 후 조치</span>
+      </div>
+      ${reported.length === 0 ? '<div style="padding:40px;text-align:center;color:var(--text-soft);font-size:14px;">신고된 게시물이 없어요 ✅</div>' :
+        reported.map(p => `
+          <div class="report-row">
+            <div class="report-text">
+              <strong>${p.title}</strong>
+              <span>${p.content.slice(0,60)}...</span>
+            </div>
+            <div class="report-actions">
+              <button class="btn-sm btn-safe" onclick="clearReport(${p.id})">✅ 이상없음</button>
+              <button class="btn-sm btn-danger" onclick="deletePost(${p.id})">🗑️ 삭제</button>
+            </div>
+          </div>
+        `).join('')
+      }
+    </div>
+
+    <div style="margin-top:28px;" class="report-table">
+      <div class="table-header">
+        📋 전체 게시물 관리
+      </div>
+      ${posts.slice(0,8).map(p => `
+        <div class="report-row">
+          <div class="report-text">
+            <strong>${p.title}</strong>
+            <span>${catEmoji[p.cat]} ${p.cat} · 💛${p.hearts} · 💬${p.comments.length}</span>
+          </div>
+          <div class="report-actions">
+            <button class="btn-sm btn-danger" onclick="deletePost(${p.id})">🗑️ 삭제</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function clearReport(id) { reportedIds.delete(id); renderAdmin(); toast('이상없음 처리 됐어요 ✅'); }
+function deletePost(id) {
+  posts = posts.filter(p => p.id !== id);
+  reportedIds.delete(id);
+  renderAdmin();
+  toast('게시물을 삭제했어요 🗑️');
+}
+
+// ===== TOAST =====
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ===== INIT =====
+renderPopular();
+renderFeed();
+</script>
+</body>
+</html>
